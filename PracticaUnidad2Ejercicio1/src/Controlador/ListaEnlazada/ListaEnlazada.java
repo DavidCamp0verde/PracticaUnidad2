@@ -302,31 +302,13 @@ public class ListaEnlazada<E> {
         do {
             if (Utilidades.isNumber(clazz)) {
                 if (tipoOrdenacion == ascendente) {
-                    while (((Number) arreglo[i]).doubleValue() < ((Number) pivote).doubleValue()) {
-                        i++;
-                    }
-                    while (((Number) arreglo[j]).doubleValue() > ((Number) pivote).doubleValue()) {
-                        j--;
-                    }
+                    while (((Number) arreglo[i]).doubleValue() < ((Number) pivote).doubleValue()) i++;
+                    while (((Number) arreglo[j]).doubleValue() > ((Number) pivote).doubleValue()) j--;
                 } else {
-                    while (((Number) arreglo[i]).doubleValue() > ((Number) pivote).doubleValue()) {
-                        i++;
-                    }
-                    while (((Number) arreglo[j]).doubleValue() < ((Number) pivote).doubleValue()) {
-                        j--;
-                    }
+                    while (((Number) arreglo[i]).doubleValue() > ((Number) pivote).doubleValue()) i++;
+                    while (((Number) arreglo[j]).doubleValue() < ((Number) pivote).doubleValue()) j--;
                 }
             }
-
-//            if(Utilidades.isString(clazz)){
-//                if(tipoOrdenacion == descendente){
-//                    while(arreglo[i].toString().toLowerCase().compareTo(arreglo[j].toString().toLowerCase())<0) i++;
-//                    while(arreglo[i].toString().toLowerCase().compareTo(arreglo[j].toString().toLowerCase())>0) j--;
-//                }else{
-//                    while(arreglo[i].toString().toLowerCase().compareTo(arreglo[j].toString().toLowerCase())>0) i++;
-//                    while(arreglo[i].toString().toLowerCase().compareTo(arreglo[j].toString().toLowerCase())<0) j--;
-//                }
-//            }
             if (i <= j) {
                 if (isObject) {
 

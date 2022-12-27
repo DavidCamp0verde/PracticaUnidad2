@@ -23,7 +23,7 @@ public class Main {
         System.out.println("ASCENDENTE");
         lista.ordenarQuickSort(null, 1).imprimirListaFloat();
         
-//        System.out.println("DESCENDENTE");
+        System.out.println("DESCENDENTE");
         lista2.ordenarQuickSort(null, 2).imprimirListaFloat();
         
 //        ListaEnlazada<String> listaS = new ListaEnlazada<>();
