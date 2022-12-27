@@ -302,14 +302,22 @@ public class ListaEnlazada<E> {
         do {
             if (Utilidades.isNumber(clazz)) {
                 if (tipoOrdenacion == ascendente) {
-                    while (((Number) arreglo[i]).doubleValue() < ((Number) pivote).doubleValue()) i++;
-                    while (((Number) arreglo[j]).doubleValue() > ((Number) pivote).doubleValue()) j--;
+                    while (((Number) arreglo[i]).doubleValue() < ((Number) pivote).doubleValue()) {
+                        i++;
+                    }
+                    while (((Number) arreglo[j]).doubleValue() > ((Number) pivote).doubleValue()) {
+                        j--;
+                    }
                 } else {
-                    while (((Number) arreglo[i]).doubleValue() > ((Number) pivote).doubleValue()) i++;
-                    while (((Number) arreglo[j]).doubleValue() < ((Number) pivote).doubleValue()) j--;
+                    while (((Number) arreglo[i]).doubleValue() > ((Number) pivote).doubleValue()) {
+                        i++;
+                    }
+                    while (((Number) arreglo[j]).doubleValue() < ((Number) pivote).doubleValue()) {
+                        j--;
+                    }
                 }
             }
-            
+
 //            if(Utilidades.isString(clazz)){
 //                if(tipoOrdenacion == descendente){
 //                    while(arreglo[i].toString().toLowerCase().compareTo(arreglo[j].toString().toLowerCase())<0) i++;
@@ -319,10 +327,9 @@ public class ListaEnlazada<E> {
 //                    while(arreglo[i].toString().toLowerCase().compareTo(arreglo[j].toString().toLowerCase())<0) j--;
 //                }
 //            }
-            
             if (i <= j) {
                 if (isObject) {
-                    System.out.println("Es objeto");
+
                 } else {
                     intercambioDatoQuick(arreglo, i, j);
                     i++;
@@ -350,11 +357,83 @@ public class ListaEnlazada<E> {
             arreglo[j] = arreglo[i];
             arreglo[i] = (E) aux;
         }
-        if(Utilidades.isString(clazz)){
+        if (Utilidades.isString(clazz)) {
             aux = (String) arreglo[j];
             arreglo[j] = arreglo[i];
             arreglo[i] = (E) aux;
         }
+    }
+
+    public ListaEnlazada<E> busquedaSecuencial(String atributo, Object dato) {
+        Class<E> clazz = null;
+        ListaEnlazada<E> resultado = new ListaEnlazada<>();
+        if (size > 0) {
+            E[] arreglo = toArray();
+            clazz = (Class<E>) cabecera.getDato().getClass();
+            Boolean isObject = Utilidades.isObject(clazz);
+            for (int i = 0; i < arreglo.length; i++) {
+                if (isObject) {
+
+                } else {
+                    Boolean encontrado = buscarPosicion(arreglo[i], dato);
+                    if (encontrado) {
+                        resultado.insertar(arreglo[i]);
+                    } else {
+                    }
+                }
+            }
+
+        }
+        return resultado;
+    }
+
+    private Boolean buscarPosicion(Object datoMatriz, Object busqueda) {
+        if (Utilidades.isNumber(busqueda.getClass())) {
+            if ((((Number) datoMatriz)).doubleValue() == (((Number) busqueda)).doubleValue()) {
+                return true;
+            }
+        } else if (Utilidades.isString(busqueda.getClass())) {
+            if (datoMatriz.toString().toLowerCase().startsWith(busqueda.toString().toLowerCase())
+                    || datoMatriz.toString().toLowerCase().endsWith(busqueda.toString().toLowerCase())
+                    || datoMatriz.toString().toLowerCase().equalsIgnoreCase(busqueda.toString().toLowerCase())
+                    || datoMatriz.toString().toLowerCase().contains(busqueda.toString().toLowerCase())) {
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
+    public Integer busquedaBinaria(String atributo, Object dato) {
+        Integer posicion = 0;
+        E[] arreglo = toArray();
+        Boolean isObject = Utilidades.isObject(arreglo[0].getClass());
+
+        Integer central, bajo, alto;
+        Object valorCentral;
+        bajo = 0;
+        alto = arreglo.length - 1;
+        while (bajo <= alto) {
+            central = (bajo + alto) / 2;
+            valorCentral = arreglo[central];
+
+            if (isObject) {
+
+            } else {
+                if (Utilidades.isNumber(arreglo[0].getClass())) { //Numeros
+                    if (((Number) dato).doubleValue() == ((Number) valorCentral).doubleValue()) {
+                        return central;
+                    } else if (((Number) dato).doubleValue() < ((Number) valorCentral).doubleValue()) {
+                        alto = central - 1;
+                    } else {
+                        bajo = central + 1;
+                    }
+                }
+
+            }
+        }
+        return -1;
     }
 
     public float generarNumeroAleatorio() {

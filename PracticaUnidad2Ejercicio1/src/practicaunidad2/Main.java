@@ -23,7 +23,7 @@ public class Main {
         System.out.println("ASCENDENTE");
         lista.ordenarQuickSort(null, 1).imprimirListaFloat();
         
-        System.out.println("DESCENDENTE");
+//        System.out.println("DESCENDENTE");
         lista2.ordenarQuickSort(null, 2).imprimirListaFloat();
         
 //        ListaEnlazada<String> listaS = new ListaEnlazada<>();
@@ -37,9 +37,21 @@ public class Main {
 //        listaS.insertar("Dahyun");
 //        listaS.insertar("Chaeyoung");
 //        listaS.insertar("Tzuyu");
-//        listaS.ordenarQuickSort(null, 2).imprimir();
-//        
+//        listaS.imprimir();
+//        listaS.busquedaSecuencial(null, "na").imprimir();
         
+//        ListaEnlazada<Integer> listaN = new ListaEnlazada<>();
+//        ListaEnlazada<Integer> listaN2 = new ListaEnlazada<>();
+//        listaN.insertar(-1);
+//        listaN.insertar(0);
+//        listaN.insertar(2);
+//        listaN.insertar(5);
+//        listaN.insertar(7);
+//        listaN.insertar(9);
+//        listaN.insertar(20);
+//        listaN.insertar(25);
+//        Integer posicion = listaN.busquedaBinaria(null, 20);
+//        System.out.println(posicion);
         
     }
     
