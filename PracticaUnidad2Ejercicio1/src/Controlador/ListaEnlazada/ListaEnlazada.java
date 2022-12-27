@@ -279,7 +279,6 @@ public class ListaEnlazada<E> {
 
         if (size > 0) {
             recursividadQuick(arreglo, 0, arreglo.length - 1, tipoOrdenacion);
-//            recursividadFloat(arreglo, 0, arreglo.length - 1, tipoOrdenacion);
         }
 
         if (arreglo != null) {
@@ -301,25 +300,35 @@ public class ListaEnlazada<E> {
         Boolean isObject = Utilidades.isObject(clazz);
 
         do {
-
-            while (((Number) arreglo[i]).doubleValue() < ((Number) pivote).doubleValue()) {
-                i++;
+            if (Utilidades.isNumber(clazz)) {
+                if (tipoOrdenacion == ascendente) {
+                    while (((Number) arreglo[i]).doubleValue() < ((Number) pivote).doubleValue()) i++;
+                    while (((Number) arreglo[j]).doubleValue() > ((Number) pivote).doubleValue()) j--;
+                } else {
+                    while (((Number) arreglo[i]).doubleValue() > ((Number) pivote).doubleValue()) i++;
+                    while (((Number) arreglo[j]).doubleValue() < ((Number) pivote).doubleValue()) j--;
+                }
             }
-            while (((Number) arreglo[j]).doubleValue() > ((Number) pivote).doubleValue()) {
-                j--;
-            }
-//            compararPivote(pivote, arreglo, i, j);
+            
+//            if(Utilidades.isString(clazz)){
+//                if(tipoOrdenacion == descendente){
+//                    while(arreglo[i].toString().toLowerCase().compareTo(arreglo[j].toString().toLowerCase())<0) i++;
+//                    while(arreglo[i].toString().toLowerCase().compareTo(arreglo[j].toString().toLowerCase())>0) j--;
+//                }else{
+//                    while(arreglo[i].toString().toLowerCase().compareTo(arreglo[j].toString().toLowerCase())>0) i++;
+//                    while(arreglo[i].toString().toLowerCase().compareTo(arreglo[j].toString().toLowerCase())<0) j--;
+//                }
+//            }
+            
             if (i <= j) {
                 if (isObject) {
                     System.out.println("Es objeto");
                 } else {
-                    aux = (Number) arreglo[i];
-                    arreglo[i] = arreglo[j];
-                    arreglo[j] = (E) aux;
+                    intercambioDatoQuick(arreglo, i, j);
                     i++;
                     j--;
                 }
-                
+
             }
         } while (i <= j);
 
@@ -332,36 +341,19 @@ public class ListaEnlazada<E> {
 
     }
 
-    public void compararPivote(E pivote, E[] arreglo, Integer i, Integer j) {
-        Class clazz = arreglo[0].getClass();
-        if (Utilidades.isNumber(clazz)) {
-            while (((Number) arreglo[i]).doubleValue() < ((Number) pivote).doubleValue()) {
-                i++;
-            }
-            while (((Number) arreglo[j]).doubleValue() > ((Number) pivote).doubleValue()) {
-                j--;
-            }
-        }
-    }
-
-    public void intercambioDatoQuick(E[] arreglo, Integer i, Integer j, Integer tipoOrdenacion) {
+    public void intercambioDatoQuick(E[] arreglo, Integer i, Integer j) {
         Class clazz = arreglo[0].getClass();
         Object aux;
 
         if (Utilidades.isNumber(clazz)) {
-            if (tipoOrdenacion == ascendente) {
-                if (((Number) arreglo[i]).doubleValue() > ((Number) arreglo[j]).doubleValue()) {
-                    aux = (Number) arreglo[i];
-                    arreglo[i] = arreglo[j];
-                    arreglo[j] = (E) aux;
-                }
-            } else {
-                if (((Number) arreglo[i]).doubleValue() < ((Number) arreglo[j]).doubleValue()) {
-                    aux = (Number) arreglo[i];
-                    arreglo[i] = arreglo[j];
-                    arreglo[j] = (E) aux;
-                }
-            }
+            aux = (Number) arreglo[j];
+            arreglo[j] = arreglo[i];
+            arreglo[i] = (E) aux;
+        }
+        if(Utilidades.isString(clazz)){
+            aux = (String) arreglo[j];
+            arreglo[j] = arreglo[i];
+            arreglo[i] = (E) aux;
         }
     }
 
