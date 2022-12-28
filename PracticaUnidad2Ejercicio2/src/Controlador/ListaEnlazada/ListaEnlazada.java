@@ -434,6 +434,7 @@ public class ListaEnlazada<E> {
 
     public void vaciar() {
         this.cabecera = null;
+        this.size = 0;
     }
 
     public void imprimir() {
