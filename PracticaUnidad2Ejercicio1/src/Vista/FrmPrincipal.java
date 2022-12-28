@@ -24,7 +24,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(this);
         ordenarDesactivado();
-
     }
 
     public void cargarTabla() {
@@ -200,13 +199,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
                     .addComponent(btnCrearLista))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(lblMetodo)
                     .addComponent(jLabel6)
                     .addComponent(lblTipo))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15))
         );
@@ -255,6 +254,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             lista.llenarLista(Integer.parseInt(txtTamanioLista.getText()));
             btnCrearLista.setEnabled(false);
             ordenarActivado();
+            jScrollPane1.setVisible(true);
             cargarTabla();
         }
     }//GEN-LAST:event_btnCrearListaActionPerformed

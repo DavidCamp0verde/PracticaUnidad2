@@ -18,13 +18,11 @@ public class Main {
     public static void main(String[] args) {
         ListaEnlazada<Float> lista = new ListaEnlazada<>();
         ListaEnlazada<Float> lista2 = new ListaEnlazada<>();
-        lista.llenarLista(20);
-        lista2.llenarLista(20);
+        lista.llenarLista(200);
+//        lista2.llenarLista(20);
         System.out.println("ASCENDENTE");
-        lista.ordenarQuickSort(null, 1).imprimirListaFloat();
-        
-        System.out.println("DESCENDENTE");
-        lista2.ordenarQuickSort(null, 2).imprimirListaFloat();
+        lista.ordenarShell(null, 1).imprimirListaFloat();
+//        lista.ordenarShell(null, 2).imprimirListaFloat();
         
 //        ListaEnlazada<String> listaS = new ListaEnlazada<>();
 //        listaS.insertar("David");
