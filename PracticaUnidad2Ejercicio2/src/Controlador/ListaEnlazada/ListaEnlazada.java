@@ -4,11 +4,12 @@
  */
 package Controlador.ListaEnlazada;
 
+import Controlador.ListaEnlazada.Excepciones.AtributoException;
 import Controlador.ListaEnlazada.Excepciones.ListaVaciaExcepcion;
 import Controlador.ListaEnlazada.Excepciones.PosicionNoEncontradaException;
 import Controlador.Utilidades.Utilidades;
 import java.lang.reflect.Array;
-import java.text.DecimalFormat;
+import java.lang.reflect.Field;
 
 /**
  *
@@ -203,7 +204,6 @@ public class ListaEnlazada<E> {
             Integer intervalo, i, j, k;
             Integer n = arreglo.length;
             intervalo = n / 2;
-            Object aux;
             clazz = (Class<E>) cabecera.getDato().getClass();
             Boolean isObject = Utilidades.isObject(clazz);
 
@@ -213,6 +213,12 @@ public class ListaEnlazada<E> {
                     while (j >= 0) {
                         k = j + intervalo;
                         if (isObject) {
+
+                            try {
+                                compararAtributoShell(arreglo, j, k, tipoOrdenacion, atributo, clazz);
+                            } catch (Exception e) {
+                                System.out.println("error: " + e.getMessage() + "\nLinea:" + e.getStackTrace()[0].getLineNumber());
+                            }
 
                         } else {
                             intercambioDatoShell(arreglo, j, k, tipoOrdenacion);
@@ -273,12 +279,78 @@ public class ListaEnlazada<E> {
         }
     }
 
+    public void compararAtributoShell(E[] arreglo, Integer j, Integer k, Integer tipoOrdenacion, String atributo, Class clazz) throws Exception {
+        E auxJ = arreglo[j];
+        E auxK = arreglo[k];
+        Field field = Utilidades.obtenerAtributo(clazz, atributo);
+        if (field == null) {
+            throw new AtributoException();
+        } else {
+            field.setAccessible(true);
+            Object a = field.get(auxJ);
+            Object b = field.get(auxK);
+
+            intercambioObjetoShell(arreglo, a, b, j, k, tipoOrdenacion, atributo);
+        }
+    }
+
+    public void intercambioObjetoShell(E[] arreglo, Object auxJ, Object auxK, Integer j, Integer k, Integer tipoOrdenacion, String atributo) {
+        Class clazz = auxJ.getClass();
+        Object aux;
+        if (Utilidades.isNumber(clazz)) {
+            if (tipoOrdenacion == descendente) {
+                if (((Number) auxJ).doubleValue() > ((Number) auxK).doubleValue()) {
+                    j = -1;
+                } else {
+                    aux = arreglo[j];
+                    arreglo[j] = arreglo[k];
+                    arreglo[k] = (E) aux;
+                }
+            } else {
+                if (((Number) auxJ).doubleValue() < ((Number) auxK).doubleValue()) {
+                    j = -1;
+                } else {
+                    aux = arreglo[j];
+                    arreglo[j] = arreglo[k];
+                    arreglo[k] = (E) aux;
+                }
+            }
+
+        }
+        if (Utilidades.isString(clazz)) {
+            if (tipoOrdenacion == descendente) {
+                if (auxJ.toString().toLowerCase().compareTo(auxK.toString().toLowerCase()) > 0) {
+                    j = -1;
+                } else {
+                    aux = arreglo[j];
+                    arreglo[j] = arreglo[k];
+                    arreglo[k] = (E) aux;
+                }
+            } else {
+                if (auxJ.toString().toLowerCase().compareTo(auxK.toString().toLowerCase()) < 0) {
+                    j = -1;
+                } else {
+                    aux = arreglo[j];
+                    arreglo[j] = arreglo[k];
+                    arreglo[k] = (E) aux;
+                }
+            }
+        }
+    }
+
     public ListaEnlazada<E> ordenarQuickSort(String atributo, Integer tipoOrdenacion) {
         E[] arreglo = toArray();
         Class<E> clazz = null;
 
         if (size > 0) {
-            recursividadQuick(arreglo, 0, arreglo.length - 1, tipoOrdenacion);
+            clazz = (Class<E>) cabecera.getDato().getClass();
+            Boolean isObject = Utilidades.isObject(clazz);
+            if (isObject) {
+                
+            } else {
+                recursividadQuick(arreglo, 0, arreglo.length - 1, tipoOrdenacion);
+            }
+
         }
 
         if (arreglo != null) {
@@ -306,7 +378,16 @@ public class ListaEnlazada<E> {
                     while (((Number) arreglo[j]).doubleValue() > ((Number) pivote).doubleValue()) j--;
                 } else {
                     while (((Number) arreglo[i]).doubleValue() > ((Number) pivote).doubleValue()) i++;
-                    while (((Number) arreglo[j]).doubleValue() < ((Number) pivote).doubleValue()) j--;
+                    while (((Number) arreglo[j]).doubleValue() < ((Number) pivote).doubleValue())j--;
+                }
+            }
+            if (Utilidades.isString(clazz)) {
+                if (tipoOrdenacion == ascendente) {
+                    while (arreglo[i].toString().toLowerCase().compareTo(pivote.toString().toLowerCase()) < 0) i++;
+                    while (arreglo[j].toString().toLowerCase().compareTo(pivote.toString().toLowerCase()) >  0) j--;
+                } else {
+                    while (arreglo[i].toString().toLowerCase().compareTo(pivote.toString().toLowerCase()) > 0) i++;
+                    while (arreglo[j].toString().toLowerCase().compareTo(pivote.toString().toLowerCase()) <  0) j--;
                 }
             }
             if (i <= j) {
@@ -441,30 +522,11 @@ public class ListaEnlazada<E> {
         System.out.println("-------------------------LISTA ENLAZADA-------------------------");
         NodoLista<E> aux = cabecera;
         while (aux != null) {
-            System.out.print(aux.getDato().toString() + "\t");
+            System.out.print(aux.getDato().toString() + "\n");
             aux = aux.getSiguiente();
         }
         System.out.println("\n");
         System.out.println("----------------------------------------------------------------");
-        System.out.println("\n");
-    }
-
-    public void imprimirListaFloat() {
-        DecimalFormat formato = new DecimalFormat("#.00");
-        System.out.println("-------------------------------LISTA ENLAZADA-------------------------------");
-        NodoLista<E> aux = cabecera;
-        int i = 1;
-        while (aux != null) {
-            System.out.print(formato.format(aux.getDato()) + "\t");
-            aux = aux.getSiguiente();
-            i++;
-            if (i > 10) {
-                System.out.println("\n");
-                i = 1;
-            }
-
-        }
-        System.out.println("----------------------------------------------------------------------------");
         System.out.println("\n");
     }
 

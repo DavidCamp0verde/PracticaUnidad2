@@ -11,9 +11,18 @@ package Modelo;
 public class Auto {
     private Integer id;
     private String matricula;
+    private String marca;
     private String modelo;
     private Float precio;
 
+    public Auto(Integer id, String matricula, String marca, String modelo, Float precio) {
+        this.id = id;
+        this.matricula = matricula;
+        this.marca = marca;
+        this.modelo = modelo;
+        this.precio = precio;
+    }
+    
     public Integer getId() {
         return id;
     }
@@ -45,6 +54,20 @@ public class Auto {
     public void setPrecio(Float precio) {
         this.precio = precio;
     }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    @Override
+    public String toString() {
+        return id+" : "+matricula+" - "+marca+" - "+modelo+" - "+precio+"$";
+    }
+    
     
     
 }

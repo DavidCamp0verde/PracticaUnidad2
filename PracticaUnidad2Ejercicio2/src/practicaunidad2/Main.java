@@ -5,6 +5,8 @@
 package practicaunidad2;
 
 import Controlador.AutoController;
+import Controlador.ListaEnlazada.ListaEnlazada;
+import Modelo.Auto;
 
 
 /**
@@ -17,8 +19,12 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
         AutoController ac = new AutoController();
+        ac.crearAutos();
+        ac.getAutos().imprimir();
+        ac.getAutos().ordenarShell("matricula",1).imprimir();
+
+        
         
     }
     
