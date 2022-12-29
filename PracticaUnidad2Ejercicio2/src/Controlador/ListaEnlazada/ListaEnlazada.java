@@ -542,31 +542,32 @@ public class ListaEnlazada<E> {
 
     }
 
-//    public ListaEnlazada<E> busquedaSecuencial(String atributo, Object dato) throws Exception {
-//        Class<E> clazz = null;
-//        ListaEnlazada<E> resultado = new ListaEnlazada<>();
-//        if (size > 0) {
-//            E[] arreglo = toArray();
-//            clazz = (Class<E>) cabecera.getDato().getClass();
-//            Boolean isObject = Utilidades.isObject(clazz);
-//            for (int i = 0; i < arreglo.length; i++) {
-//                if (isObject) {
-//                    Boolean band = evaluarBusquedaObjeto(arreglo[i], dato, clazz, atributo);
-//                     if(band){
-//                         resultado.insertar(arreglo[i]);
-//                     }
-//                } else {
-//                    Boolean encontrado = buscarPosicion(arreglo[i], dato);
-//                    if (encontrado) {
-//                        resultado.insertar(arreglo[i]);
-//                    } else {
-//                    }
-//                }
-//            }
-//
-//        }
-//        return resultado;
-//    }
+    public ListaEnlazada<E> busquedaSecuencial(String atributo, Object dato) throws Exception {
+        Class<E> clazz = null;
+        ListaEnlazada<E> resultado = new ListaEnlazada<>();
+        if (size > 0) {
+            E[] arreglo = toArray();
+            clazz = (Class<E>) cabecera.getDato().getClass();
+            Boolean isObject = Utilidades.isObject(clazz);
+            for (int i = 0; i < arreglo.length; i++) {
+                if (isObject) {
+                    Boolean band = evaluarBusquedaObjeto(arreglo[i], dato, clazz, atributo);
+                     if(band){
+                         resultado.insertar(arreglo[i]);
+                     }
+                } else {
+                    Boolean encontrado = buscarPosicion(arreglo[i], dato);
+                    if (encontrado) {
+                        resultado.insertar(arreglo[i]);
+                    } else {
+                    }
+                }
+            }
+
+        }
+        return resultado;
+    }
+    
     public Integer busquedaBinaria(String atributo, Object dato) throws Exception {
         Integer posicion = 0;
         E[] arreglo = toArray();
@@ -638,18 +639,17 @@ public class ListaEnlazada<E> {
         Object valorCentral = arreglo[central];
 
         if (isObject) {//Objetos
-            buscarObjeto(resultado, arreglo, bajo, alto, central, clazz, atributo, dato, valorCentral);
-        }else{
-            
+            compararObjetos(resultado, arreglo, bajo, alto, central, clazz, atributo, dato, valorCentral);
+        } else {
+
         }
         return resultado;
     }
 
-    private void buscarObjeto(ListaEnlazada<E> resultado, E[] arreglo, Integer bajo, Integer alto, Integer central,
-            Class clazz, String atributo, Object dato, Object valorCentral) throws Exception{
+    private void compararObjetos(ListaEnlazada<E> resultado, E[] arreglo, Integer bajo, Integer alto, Integer central,
+            Class clazz, String atributo, Object dato, Object valorCentral) throws Exception {
         Object a;
-        Boolean band;
-        
+
         Field field = Utilidades.obtenerAtributo(clazz, atributo);
         if (field == null) {
             throw new AtributoException();
@@ -668,12 +668,7 @@ public class ListaEnlazada<E> {
                 alto = arreglo.length - 1;
                 bajo = central;
             }
-            for (int aux = bajo; bajo < alto; bajo++) {
-                band = evaluarBusquedaObjeto(arreglo[bajo], dato, clazz, atributo);
-                if (band) {
-                    resultado.insertar(arreglo[bajo]);
-                }
-            }
+            buscarObjetos(resultado, bajo, alto, arreglo, clazz, atributo, dato);
 
         }
         if (Utilidades.isString(a.getClass())) { //Atributos Strings
@@ -686,15 +681,20 @@ public class ListaEnlazada<E> {
                 alto = arreglo.length - 1;
                 bajo = central;
             }
-            for (int aux = bajo; bajo < alto; bajo++) {
-                band = evaluarBusquedaObjeto(arreglo[bajo], dato, clazz, atributo);
-                if (band) {
-                    resultado.insertar(arreglo[bajo]);
-                }
-            }
+            buscarObjetos(resultado, bajo, alto, arreglo, clazz, atributo, dato);
 
         }
 
+    }
+
+    private void buscarObjetos(ListaEnlazada<E> resultado, Integer bajo, Integer alto, E[] arreglo, Class clazz, String atributo, Object dato) throws Exception{
+        Boolean band;
+        for (int aux = bajo; bajo < alto+1; bajo++) {
+            band = evaluarBusquedaObjeto(arreglo[bajo], dato, clazz, atributo);
+            if (band) {
+                resultado.insertar(arreglo[bajo]);
+            }
+        }
     }
 
     private Boolean evaluarBusquedaObjeto(E aux, Object dato, Class clazz, String atributo) throws Exception {
