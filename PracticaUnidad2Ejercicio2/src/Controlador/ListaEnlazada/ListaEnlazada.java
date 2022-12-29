@@ -629,80 +629,79 @@ public class ListaEnlazada<E> {
     public ListaEnlazada<E> busquedaBinariaSecuencial(String atributo, Object dato) throws Exception {
         Class<E> clazz = null;
         ListaEnlazada<E> resultado = new ListaEnlazada<>();
-            E[] arreglo = toArray();
-            Integer bajo = 0;
-            Integer alto = arreglo.length - 1;
-            Integer central = (bajo + alto) / 2;
-            clazz = (Class<E>) cabecera.getDato().getClass();
-            Boolean isObject = Utilidades.isObject(clazz);
-            Object valorCentral = arreglo[central];
+        E[] arreglo = toArray();
+        Integer bajo = 0;
+        Integer alto = arreglo.length - 1;
+        Integer central = (bajo + alto) / 2;
+        clazz = (Class<E>) cabecera.getDato().getClass();
+        Boolean isObject = Utilidades.isObject(clazz);
+        Object valorCentral = arreglo[central];
 
-            if (isObject) {//Objetos
-                Object a;
-                Boolean band;
-
-                Field field = Utilidades.obtenerAtributo(clazz, atributo);
-                if (field == null) {
-                    throw new AtributoException();
-                } else {
-                    field.setAccessible(true);
-                    a = field.get(valorCentral);
-                }
-
-                if (Utilidades.isNumber(a.getClass())) { //Atributos Numeros
-                    if (((Number) dato).doubleValue() == ((Number) a).doubleValue()) {
-                        resultado.insertar(arreglo[central]);
-                    } else if (((Number) dato).doubleValue() < ((Number) a).doubleValue()) {
-                        alto = central;
-                        for(bajo = 0; bajo < alto+1;  bajo++ ){
-                            band = evaluarBusquedaObjeto(arreglo[bajo], dato, clazz, atributo);
-                            if(band){
-                                resultado.insertar(arreglo[bajo]);
-                            }
-                        }
-                    } else {
-                        alto = arreglo.length-1;
-                        for(bajo = central; bajo < alto+1; bajo++){
-                            band = evaluarBusquedaObjeto(arreglo[bajo], dato, clazz, atributo);
-                            if(band){
-                                resultado.insertar(arreglo[bajo]);
-                            }
-                        }
-                    }
-                    
-                } 
-                if (Utilidades.isString(a.getClass())) { //Atributos Strings
-                    if (dato.toString().toLowerCase().equals(a.toString().toLowerCase())) {
-                        resultado.insertar(arreglo[central]);
-                    } else if (dato.toString().toLowerCase().compareTo(a.toString().toLowerCase())<0) {
-                        alto = central;
-                        for(bajo = 0; bajo < alto+1;  bajo++ ){
-                            band = evaluarBusquedaObjeto(arreglo[bajo], dato, clazz, atributo);
-                            if(band){
-                                resultado.insertar(arreglo[bajo]);
-                            }
-                        }
-                    } else {
-                        alto = arreglo.length-1;
-                        for(bajo = central; bajo < alto+1; bajo++){
-                            band = evaluarBusquedaObjeto(arreglo[bajo], dato, clazz, atributo);
-                            if(band){
-                                resultado.insertar(arreglo[bajo]);
-                            }
-                        }
-                    }
-                    
-                }
-
-            }
-            return resultado;
-    }
-    
-    private Boolean evaluarBusquedaObjeto(E aux, Object dato, Class clazz, String atributo)throws Exception{
-        Field field = Utilidades.obtenerAtributo(clazz, atributo);
-        if(field == null){
-            throw new AtributoException();
+        if (isObject) {//Objetos
+            buscarObjeto(resultado, arreglo, bajo, alto, central, clazz, atributo, dato, valorCentral);
         }else{
+            
+        }
+        return resultado;
+    }
+
+    private void buscarObjeto(ListaEnlazada<E> resultado, E[] arreglo, Integer bajo, Integer alto, Integer central,
+            Class clazz, String atributo, Object dato, Object valorCentral) throws Exception{
+        Object a;
+        Boolean band;
+        
+        Field field = Utilidades.obtenerAtributo(clazz, atributo);
+        if (field == null) {
+            throw new AtributoException();
+        } else {
+            field.setAccessible(true);
+            a = field.get(valorCentral);
+        }
+
+        if (Utilidades.isNumber(a.getClass())) { //Atributos Numeros
+            if (((Number) dato).doubleValue() == ((Number) a).doubleValue()) {
+                resultado.insertar(arreglo[central]);
+            } else if (((Number) dato).doubleValue() < ((Number) a).doubleValue()) {
+                alto = central;
+                bajo = 0;
+            } else {
+                alto = arreglo.length - 1;
+                bajo = central;
+            }
+            for (int aux = bajo; bajo < alto; bajo++) {
+                band = evaluarBusquedaObjeto(arreglo[bajo], dato, clazz, atributo);
+                if (band) {
+                    resultado.insertar(arreglo[bajo]);
+                }
+            }
+
+        }
+        if (Utilidades.isString(a.getClass())) { //Atributos Strings
+            if (dato.toString().toLowerCase().equals(a.toString().toLowerCase())) {
+                resultado.insertar(arreglo[central]);
+            } else if (dato.toString().toLowerCase().compareTo(a.toString().toLowerCase()) < 0) {
+                alto = central;
+                bajo = 0;
+            } else {
+                alto = arreglo.length - 1;
+                bajo = central;
+            }
+            for (int aux = bajo; bajo < alto; bajo++) {
+                band = evaluarBusquedaObjeto(arreglo[bajo], dato, clazz, atributo);
+                if (band) {
+                    resultado.insertar(arreglo[bajo]);
+                }
+            }
+
+        }
+
+    }
+
+    private Boolean evaluarBusquedaObjeto(E aux, Object dato, Class clazz, String atributo) throws Exception {
+        Field field = Utilidades.obtenerAtributo(clazz, atributo);
+        if (field == null) {
+            throw new AtributoException();
+        } else {
             field.setAccessible(true);
             Object a = field.get(aux);
             return buscarPosicion(a, dato);
