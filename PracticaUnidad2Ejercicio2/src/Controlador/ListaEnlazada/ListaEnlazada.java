@@ -346,7 +346,11 @@ public class ListaEnlazada<E> {
             clazz = (Class<E>) cabecera.getDato().getClass();
             Boolean isObject = Utilidades.isObject(clazz);
             if (isObject) {
-                
+                try {
+                    recursividadObjetoQuick(arreglo, 0, arreglo.length - 1, tipoOrdenacion, atributo);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage() + "\nLinea:" + e.getStackTrace()[0].getLineNumber());
+                }
             } else {
                 recursividadQuick(arreglo, 0, arreglo.length - 1, tipoOrdenacion);
             }
@@ -374,20 +378,36 @@ public class ListaEnlazada<E> {
         do {
             if (Utilidades.isNumber(clazz)) {
                 if (tipoOrdenacion == ascendente) {
-                    while (((Number) arreglo[i]).doubleValue() < ((Number) pivote).doubleValue()) i++;
-                    while (((Number) arreglo[j]).doubleValue() > ((Number) pivote).doubleValue()) j--;
+                    while (((Number) arreglo[i]).doubleValue() < ((Number) pivote).doubleValue()) {
+                        i++;
+                    }
+                    while (((Number) arreglo[j]).doubleValue() > ((Number) pivote).doubleValue()) {
+                        j--;
+                    }
                 } else {
-                    while (((Number) arreglo[i]).doubleValue() > ((Number) pivote).doubleValue()) i++;
-                    while (((Number) arreglo[j]).doubleValue() < ((Number) pivote).doubleValue())j--;
+                    while (((Number) arreglo[i]).doubleValue() > ((Number) pivote).doubleValue()) {
+                        i++;
+                    }
+                    while (((Number) arreglo[j]).doubleValue() < ((Number) pivote).doubleValue()) {
+                        j--;
+                    }
                 }
             }
             if (Utilidades.isString(clazz)) {
                 if (tipoOrdenacion == ascendente) {
-                    while (arreglo[i].toString().toLowerCase().compareTo(pivote.toString().toLowerCase()) < 0) i++;
-                    while (arreglo[j].toString().toLowerCase().compareTo(pivote.toString().toLowerCase()) >  0) j--;
+                    while (arreglo[i].toString().toLowerCase().compareTo(pivote.toString().toLowerCase()) < 0) {
+                        i++;
+                    }
+                    while (arreglo[j].toString().toLowerCase().compareTo(pivote.toString().toLowerCase()) > 0) {
+                        j--;
+                    }
                 } else {
-                    while (arreglo[i].toString().toLowerCase().compareTo(pivote.toString().toLowerCase()) > 0) i++;
-                    while (arreglo[j].toString().toLowerCase().compareTo(pivote.toString().toLowerCase()) <  0) j--;
+                    while (arreglo[i].toString().toLowerCase().compareTo(pivote.toString().toLowerCase()) > 0) {
+                        i++;
+                    }
+                    while (arreglo[j].toString().toLowerCase().compareTo(pivote.toString().toLowerCase()) < 0) {
+                        j--;
+                    }
                 }
             }
             if (i <= j) {
@@ -427,6 +447,102 @@ public class ListaEnlazada<E> {
         }
     }
 
+    public void intercambioObjectoQuick(E[] arreglo, Integer i, Integer j, Object auxI) {
+        Class clazz = auxI.getClass();
+        Object aux;
+
+        if (Utilidades.isNumber(clazz)) {
+            aux = arreglo[j];
+            arreglo[j] = arreglo[i];
+            arreglo[i] = (E) aux;
+        }
+        if (Utilidades.isString(clazz)) {
+            aux = arreglo[j];
+            arreglo[j] = arreglo[i];
+            arreglo[i] = (E) aux;
+        }
+    }
+
+//    public void compararAtributoQuick(E[] arreglo, Integer j, Integer k, Integer tipoOrdenacion, String atributo, Class clazz) throws Exception {
+//        E auxJ = arreglo[j];
+//        E auxK = arreglo[k];
+//        Field field = Utilidades.obtenerAtributo(clazz, atributo);
+//        if (field == null) {
+//            throw new AtributoException();
+//        } else {
+//            field.setAccessible(true);
+//            Object a = field.get(auxJ);
+//            Object b = field.get(auxK);
+//        }
+//    }
+    public void recursividadObjetoQuick(E[] arreglo, Integer primero, Integer ultimo, Integer tipoOrdenacion, String atributo) throws Exception {
+        Integer i, j, central;
+        E pivote;
+        Object a, b, c;
+
+        central = (primero + ultimo) / 2;
+        pivote = arreglo[central];
+        i = primero;
+        j = ultimo;
+        Class clazz = (Class<E>) cabecera.getDato().getClass();
+        Boolean isObject = Utilidades.isObject(clazz);
+
+        Field field = Utilidades.obtenerAtributo(clazz, atributo);
+        if (field == null) {
+            throw new AtributoException();
+        } else {
+            field.setAccessible(true);
+            a = field.get(arreglo[i]);
+            b = field.get(arreglo[j]);
+            c = field.get(pivote);
+        }
+        System.out.println(arreglo[i] + "\n" + arreglo[j] + "\n" + pivote);
+        System.out.println(a + "\n" + b + "\n" + c);
+
+        do {
+            if (Utilidades.isNumber(a.getClass())) {
+                System.out.println("es numero");
+                if (tipoOrdenacion == ascendente) {
+                    while (((Number) a).doubleValue() < ((Number) c).doubleValue()) {
+                        System.out.println("Comparando " + a + " menor que " + c);
+                        i++;
+                    }
+                    while (((Number) b).doubleValue() > ((Number) c).doubleValue()) {
+                        System.out.println("Comparando " + b + " mayor que " + c);
+                        j--;
+                    }
+                } else {
+                    while (((Number) a).doubleValue() > ((Number) c).doubleValue()) {
+                        i++;
+                    }
+                    while (((Number) b).doubleValue() < ((Number) c).doubleValue()) {
+                        j--;
+                    }
+                }
+            }
+            if (i <= j) {
+                if (isObject) {
+                    intercambioObjectoQuick(arreglo, i, j, a);
+                    i++;
+                    j--;
+                } else {
+                    intercambioDatoQuick(arreglo, i, j);
+                    i++;
+                    j--;
+                }
+
+            }
+        } while (i <= j);
+
+        if (primero < j) {
+            recursividadObjetoQuick(arreglo, primero, j, tipoOrdenacion, atributo);
+        }
+        if (i < ultimo) {
+            recursividadObjetoQuick(arreglo, i, ultimo, tipoOrdenacion, atributo);
+        }
+
+    }
+
     public ListaEnlazada<E> busquedaSecuencial(String atributo, Object dato) {
         Class<E> clazz = null;
         ListaEnlazada<E> resultado = new ListaEnlazada<>();
@@ -450,6 +566,79 @@ public class ListaEnlazada<E> {
         return resultado;
     }
 
+    public Integer busquedaBinaria(String atributo, Object dato) throws Exception {
+        Integer posicion = 0;
+        E[] arreglo = toArray();
+        Boolean isObject = Utilidades.isObject(arreglo[0].getClass());
+        Object a;
+        Class<E> clazz = (Class<E>) cabecera.getDato().getClass();
+        
+        Integer central, bajo, alto;
+        Object valorCentral;
+        bajo = 0;
+        alto = arreglo.length - 1;
+        while (bajo <= alto) {
+            central = (bajo + alto) / 2;
+            valorCentral = arreglo[central];
+            if (isObject) {
+                
+                Field field = Utilidades.obtenerAtributo(clazz, atributo);
+                if (field == null) {
+                    throw new AtributoException();
+                } else {
+                    field.setAccessible(true);
+                    a = field.get(valorCentral);
+                }
+                if (Utilidades.isNumber(a.getClass())) { //Numeros
+                    if (((Number) dato).doubleValue() == ((Number) a).doubleValue()) {
+                        return central;
+                    } else if (((Number) dato).doubleValue() < ((Number) a).doubleValue()) {
+                        alto = central - 1;
+                    } else {
+                        bajo = central + 1;
+                    }
+                }
+                if (Utilidades.isString(a.getClass())) { //Numeros
+                    
+                    if (dato.toString().toLowerCase().equals(a.toString().toLowerCase())) {
+                        return central;
+                    } else if (dato.toString().toLowerCase().compareTo(a.toString().toLowerCase())<0) {
+                        alto = central - 1;
+                    } else {
+                        bajo = central + 1;
+                    }
+                }
+                
+            } else {
+                if (Utilidades.isNumber(arreglo[0].getClass())) { //Numeros
+                    if (((Number) dato).doubleValue() == ((Number) valorCentral).doubleValue()) {
+                        return central;
+                    } else if (((Number) dato).doubleValue() < ((Number) valorCentral).doubleValue()) {
+                        alto = central - 1;
+                    } else {
+                        bajo = central + 1;
+                    }
+                }
+
+            }
+        }
+        return -1;
+    }
+
+    public void evaluarBusquedaObjeto(Object aux, Class clazz, String atributo) throws Exception {
+        Field field = Utilidades.obtenerAtributo(clazz, atributo);
+        if (field == null) {
+            throw new AtributoException();
+        } else {
+            field.setAccessible(true);
+            Object a = field.get(aux);
+        }
+    }
+
+    public void buscarObjeto(Object a) {
+
+    }
+
     private Boolean buscarPosicion(Object datoMatriz, Object busqueda) {
         if (Utilidades.isNumber(busqueda.getClass())) {
             if ((((Number) datoMatriz)).doubleValue() == (((Number) busqueda)).doubleValue()) {
@@ -466,37 +655,6 @@ public class ListaEnlazada<E> {
         }
 
         return false;
-    }
-
-    public Integer busquedaBinaria(String atributo, Object dato) {
-        Integer posicion = 0;
-        E[] arreglo = toArray();
-        Boolean isObject = Utilidades.isObject(arreglo[0].getClass());
-
-        Integer central, bajo, alto;
-        Object valorCentral;
-        bajo = 0;
-        alto = arreglo.length - 1;
-        while (bajo <= alto) {
-            central = (bajo + alto) / 2;
-            valorCentral = arreglo[central];
-
-            if (isObject) {
-
-            } else {
-                if (Utilidades.isNumber(arreglo[0].getClass())) { //Numeros
-                    if (((Number) dato).doubleValue() == ((Number) valorCentral).doubleValue()) {
-                        return central;
-                    } else if (((Number) dato).doubleValue() < ((Number) valorCentral).doubleValue()) {
-                        alto = central - 1;
-                    } else {
-                        bajo = central + 1;
-                    }
-                }
-
-            }
-        }
-        return -1;
     }
 
     public float generarNumeroAleatorio() {
@@ -525,7 +683,6 @@ public class ListaEnlazada<E> {
             System.out.print(aux.getDato().toString() + "\n");
             aux = aux.getSiguiente();
         }
-        System.out.println("\n");
         System.out.println("----------------------------------------------------------------");
         System.out.println("\n");
     }

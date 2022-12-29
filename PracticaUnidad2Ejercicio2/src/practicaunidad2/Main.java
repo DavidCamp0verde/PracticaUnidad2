@@ -22,7 +22,16 @@ public class Main {
         AutoController ac = new AutoController();
         ac.crearAutos();
         ac.getAutos().imprimir();
-        ac.getAutos().ordenarShell("matricula",1).imprimir();
+//        ac.getAutos().ordenarShell("id",2).imprimir();
+        try {
+            Integer pos = ac.getAutos().busquedaBinaria("matricula", "DAVS-3561");
+            System.out.println(ac.getAutos().obtener(pos));
+        } catch (Exception e) {
+            System.out.println("Error ctm: "+e.getMessage()+"\nLinea: "+e.getStackTrace()[0].getLineNumber()+"\nClase: "+e.getStackTrace()[0].getClassName());
+        }
+        
+        
+        
 
         
         
