@@ -21,11 +21,12 @@ public class Main {
     public static void main(String[] args) {
         AutoController ac = new AutoController();
         ac.crearAutos();
-        ac.getAutos().imprimir();
-//        ac.getAutos().ordenarShell("id",2).imprimir();
+        ac.getAutos().ordenarShell("marca",1).imprimir();
         try {
-            Integer pos = ac.getAutos().busquedaBinaria("matricula", "DAVS-3561");
-            System.out.println(ac.getAutos().obtener(pos));
+//            Integer pos = ac.getAutos().busquedaBinaria("precio", 20050.99f);
+//            System.out.println(ac.getAutos().obtener(pos));
+//              ac.getAutos().busquedaSecuencial("matricula", "dc").imprimir();
+            ac.getAutos().busquedaBinariaSecuencial("marca", "i").imprimir();
         } catch (Exception e) {
             System.out.println("Error ctm: "+e.getMessage()+"\nLinea: "+e.getStackTrace()[0].getLineNumber()+"\nClase: "+e.getStackTrace()[0].getClassName());
         }
