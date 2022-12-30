@@ -4,17 +4,98 @@
  */
 package Vista;
 
+import Controlador.AutoController;
+import Controlador.ListaEnlazada.ListaEnlazada;
+import Vista.Utilidades.Utilidades;
+import Modelo.Auto;
+import Vista.ModeloTabla.ModeloTablaAutos;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author David Campoverde
  */
 public class FrmPrincipal extends javax.swing.JFrame {
 
+    private AutoController ac = new AutoController();
+    private AutoController ac2 = new AutoController();
+    private ModeloTablaAutos mta = new ModeloTablaAutos();
+    private ModeloTablaAutos mta2 = new ModeloTablaAutos();
+    private DialogAuto diaAuto;
+
     /**
      * Creates new form FrmPrincipal
      */
     public FrmPrincipal() {
         initComponents();
+        cargarTabla();
+        ordenYBuscaDesactivado();
+        setLocationRelativeTo(this);
+    }
+
+    public void cargarTabla() {
+        if (!ac.getAutos().estaVacia()) {
+            mta.setListaAutos(ac);
+            tblAutos.setModel(mta);
+            tblAutos.updateUI();
+        }
+    }
+
+    public void cargarTablaBusqueda() {
+        if (!ac2.getAutos().estaVacia()) {
+            mta2.setListaAutos(ac2);
+            tblAutosBusqueda.setModel(mta2);
+            tblAutosBusqueda.updateUI();
+        }
+    }
+
+    public void agregarAuto() {
+        diaAuto = new DialogAuto(this, true);
+        diaAuto.setVisible(true);
+        Auto a = diaAuto.getAuto();
+        if (a != null) {
+            a.setId(ac.getAutos().getSize() + 1);
+            ac.getAutos().insertar(a);
+        }
+        cargarTabla();
+    }
+
+    public void ordenYBuscaDesactivado() {
+        jPanel2.setEnabled(false);
+        jLabel1.setEnabled(false);
+        cbxMetodoOrden.setEnabled(false);
+        jLabel2.setEnabled(false);
+        cbxTipoOrden.setEnabled(false);
+        btnOrdenar.setEnabled(false);
+        jPanel3.setEnabled(false);
+        jLabel3.setEnabled(false);
+        cbxMetodoBuscar.setEnabled(false);
+        jLabel4.setEnabled(false);
+        cbxAtributoBusqueda.setEnabled(false);
+        txtAtributo.setEnabled(false);
+        btnBuscar.setEnabled(false);
+        jLabel6.setEnabled(false);
+        cbxAtributoOrdenar.setEnabled(false);
+    }
+
+    public void ordenYBuscaActivado() {
+        jPanel2.setEnabled(true);
+        jLabel1.setEnabled(true);
+        cbxMetodoOrden.setEnabled(true);
+        jLabel2.setEnabled(true);
+        cbxTipoOrden.setEnabled(true);
+        btnOrdenar.setEnabled(true);
+        jPanel3.setEnabled(true);
+        jLabel3.setEnabled(true);
+        cbxMetodoBuscar.setEnabled(true);
+        jLabel4.setEnabled(true);
+        cbxAtributoBusqueda.setEnabled(true);
+        txtAtributo.setEnabled(true);
+        btnBuscar.setEnabled(true);
+        jLabel6.setEnabled(true);
+        cbxAtributoOrdenar.setEnabled(true);
     }
 
     /**
@@ -26,21 +107,384 @@ public class FrmPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        cbxMetodoOrden = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
+        cbxTipoOrden = new javax.swing.JComboBox<>();
+        btnOrdenar = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        cbxAtributoOrdenar = new javax.swing.JComboBox<>();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        cbxMetodoBuscar = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        cbxAtributoBusqueda = new javax.swing.JComboBox<>();
+        txtAtributo = new javax.swing.JTextField();
+        btnBuscar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblAutos = new javax.swing.JTable();
+        btnAgregarAutos = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        lblMetodoOrden = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        lblTipoOrden = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        lblMetodoBuscar = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        lblAtributoBuscado = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblAutosBusqueda = new javax.swing.JTable();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        Guardar = new javax.swing.JMenuItem();
+        Cargar = new javax.swing.JMenuItem();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Ordenar"));
+
+        jLabel1.setText("Método");
+
+        cbxMetodoOrden.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Shell", "QuickSort" }));
+
+        jLabel2.setText("Tipo");
+
+        cbxTipoOrden.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ascendente", "Descendente" }));
+
+        btnOrdenar.setText("Ordenar");
+        btnOrdenar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOrdenarActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Ordenar por");
+
+        cbxAtributoOrdenar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Matricula", "Marca", "Modelo", "Precio" }));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnOrdenar)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cbxMetodoOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbxTipoOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbxAtributoOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(cbxMetodoOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(cbxTipoOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(cbxAtributoOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnOrdenar)
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Buscar"));
+
+        jLabel3.setText("Método");
+
+        cbxMetodoBuscar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Binaria", "BinariaSecuencial" }));
+
+        jLabel4.setText("Buscar por");
+
+        cbxAtributoBusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Matricula", "Marca", "Modelo", "Precio" }));
+
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnBuscar)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbxMetodoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(22, 22, 22)
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbxAtributoBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtAtributo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(cbxMetodoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(cbxAtributoBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAtributo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnBuscar)
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+
+        tblAutos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblAutos);
+
+        btnAgregarAutos.setText("Agregar Auto");
+        btnAgregarAutos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarAutosActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel5.setText("Método de Ordenación");
+
+        lblMetodoOrden.setText("NO DEFINIDO");
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel7.setText("Tipo de Ordenación");
+
+        lblTipoOrden.setText("NO DEFINIDO");
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel9.setText("Método de Búsqueda");
+
+        lblMetodoBuscar.setText("NO DEFINIDO");
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel11.setText("Buscado por");
+
+        lblAtributoBuscado.setText("NO DEFINIDO");
+
+        tblAutosBusqueda.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tblAutosBusqueda);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnAgregarAutos, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(25, 25, 25)
+                                .addComponent(jLabel5)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblMetodoOrden)
+                                .addGap(68, 68, 68)
+                                .addComponent(jLabel7)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblTipoOrden))
+                            .addComponent(jScrollPane2)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(68, 68, 68)
+                        .addComponent(jLabel9)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblMetodoBuscar)
+                        .addGap(78, 78, 78)
+                        .addComponent(jLabel11)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblAtributoBuscado)))
+                .addContainerGap(25, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(lblMetodoOrden)
+                    .addComponent(jLabel7)
+                    .addComponent(lblTipoOrden))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnAgregarAutos)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(lblMetodoBuscar)
+                    .addComponent(jLabel11)
+                    .addComponent(lblAtributoBuscado))
+                .addGap(31, 31, 31)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(66, Short.MAX_VALUE))
+        );
+
+        jMenu1.setText("File");
+
+        Guardar.setText("Guardar");
+        Guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GuardarActionPerformed(evt);
+            }
+        });
+        jMenu1.add(Guardar);
+
+        Cargar.setText("Cargar");
+        Cargar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CargarActionPerformed(evt);
+            }
+        });
+        jMenu1.add(Cargar);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAgregarAutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarAutosActionPerformed
+        agregarAuto();
+        ordenYBuscaActivado();
+    }//GEN-LAST:event_btnAgregarAutosActionPerformed
+
+    private void btnOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdenarActionPerformed
+        if (cbxMetodoOrden.getSelectedItem().toString().equalsIgnoreCase("shell")) {
+            lblMetodoOrden.setText("Shell");
+            if (cbxTipoOrden.getSelectedItem().toString().equalsIgnoreCase("ascendente")) {
+                ac.getAutos().ordenarShell(cbxAtributoOrdenar.getSelectedItem().toString().toLowerCase(), 1);
+                lblTipoOrden.setText("Ascendente");
+            } else {
+                ac.getAutos().ordenarShell(cbxAtributoOrdenar.getSelectedItem().toString().toLowerCase(), 2);
+                lblTipoOrden.setText("Descendente");
+            }
+
+        }
+        cargarTabla();
+    }//GEN-LAST:event_btnOrdenarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        Object aux = 0;
+        ac2.getAutos().vaciar();
+        ac.getAutos().ordenarShell(cbxAtributoBusqueda.getSelectedItem().toString().toLowerCase(), 1);
+        if (txtAtributo.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un dato", "Error", JOptionPane.ERROR_MESSAGE);
+        } else if (cbxAtributoBusqueda.getSelectedItem().toString().toLowerCase().equals("id") || cbxAtributoBusqueda.getSelectedItem().toString().toLowerCase().equals("precio")) {
+            aux = Float.parseFloat(txtAtributo.getText());
+        } else {
+            aux = txtAtributo.getText();
+        }
+        
+        if (cbxMetodoBuscar.getSelectedItem().toString().equalsIgnoreCase("binaria")) {
+            lblMetodoBuscar.setText("Binaria");
+            try {
+                Integer pos = ac.getAutos().busquedaBinaria(cbxAtributoBusqueda.getSelectedItem().toString().toLowerCase(), aux);
+                ac2.getAutos().insertar(ac.getAutos().obtener(pos));
+                ac2.getAutos().imprimir();
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+        } else {
+            lblMetodoBuscar.setText("Binaria-Secuencial");
+            try {
+                ac2.setAutos(ac.getAutos().busquedaBinariaSecuencial(cbxAtributoBusqueda.getSelectedItem().toString().toLowerCase(), aux));
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        lblAtributoBuscado.setText(cbxAtributoBusqueda.getSelectedItem().toString().toLowerCase());
+        cargarTablaBusqueda();
+
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarActionPerformed
+        if (ac.getAutos().getSize() != 0) {
+            if (Utilidades.guardarArchivoJSON(ac)) {
+                JOptionPane.showMessageDialog(this, "Se ha guardado el archivo", "Exito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se genero el archivo", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else
+            JOptionPane.showMessageDialog(this, "Genere un listado de autos", "Error", JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_GuardarActionPerformed
+
+    private void CargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CargarActionPerformed
+        ac.setAutos(Utilidades.cargarArchivoJSON().getAutos());
+        if (ac.getAutos().getSize() != 0) {
+            cargarTabla();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo cargar el archivo", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        ordenYBuscaActivado();
+    }//GEN-LAST:event_CargarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -78,5 +522,38 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem Cargar;
+    private javax.swing.JMenuItem Guardar;
+    private javax.swing.JButton btnAgregarAutos;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnOrdenar;
+    private javax.swing.JComboBox<String> cbxAtributoBusqueda;
+    private javax.swing.JComboBox<String> cbxAtributoOrdenar;
+    private javax.swing.JComboBox<String> cbxMetodoBuscar;
+    private javax.swing.JComboBox<String> cbxMetodoOrden;
+    private javax.swing.JComboBox<String> cbxTipoOrden;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblAtributoBuscado;
+    private javax.swing.JLabel lblMetodoBuscar;
+    private javax.swing.JLabel lblMetodoOrden;
+    private javax.swing.JLabel lblTipoOrden;
+    private javax.swing.JTable tblAutos;
+    private javax.swing.JTable tblAutosBusqueda;
+    private javax.swing.JTextField txtAtributo;
     // End of variables declaration//GEN-END:variables
 }

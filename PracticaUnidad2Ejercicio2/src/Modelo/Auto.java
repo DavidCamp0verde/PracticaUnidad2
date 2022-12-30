@@ -14,14 +14,22 @@ public class Auto {
     private String marca;
     private String modelo;
     private Float precio;
-
-    public Auto(Integer id, String matricula, String marca, String modelo, Float precio) {
-        this.id = id;
-        this.matricula = matricula;
-        this.marca = marca;
-        this.modelo = modelo;
-        this.precio = precio;
-    }
+    
+//    public Auto(){
+//        
+//    }
+//    
+//    public Auto(String matricula, String marca, String modelo, Float precio) {
+//        this.matricula = matricula;
+//        this.marca = marca;
+//        this.modelo = modelo;
+//        this.precio = precio;
+//    }
+//    
+//    public Auto(String matricula, String marca, String modelo, Float precio, Integer id) {
+//        this(matricula, marca, modelo, precio);
+//        this.id = id;
+//    }
     
     public Integer getId() {
         return id;
@@ -65,7 +73,7 @@ public class Auto {
 
     @Override
     public String toString() {
-        return id+" : "+matricula+" - "+marca+" - "+modelo+" - "+precio+"$";
+        return matricula+" - "+marca+" - "+modelo+" - "+precio+"$";
     }
     
     

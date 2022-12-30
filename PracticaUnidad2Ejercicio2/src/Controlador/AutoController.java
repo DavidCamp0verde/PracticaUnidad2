@@ -14,17 +14,19 @@ import Modelo.Auto;
 public class AutoController {
     ListaEnlazada<Auto> autos = new ListaEnlazada<>();
     
-    public void crearAutos(){
-        getAutos().insertar(new Auto(1,"XCB-52013","BMW","X6",10000.99f));
-        getAutos().insertar(new Auto(2,"DAVS-3561","Chevrolet","Aveo",20050.99f));
-        getAutos().insertar(new Auto(3,"MDC","Ford","Mustang",13526.6f));
-        getAutos().insertar(new Auto(4,"NJM-2219","Honda","Civic",15999.99f));
-        getAutos().insertar(new Auto(5,"SJM-29124","Hyundai","Tucson",22535.8f));
-        getAutos().insertar(new Auto(6,"DCT-282314","Jeep","Compass",17999.59f));
-        getAutos().insertar(new Auto(7,"BHR-124","Ferrari","F8 Tributo",70589.99f));
-        getAutos().insertar(new Auto(8,"ZCK-1485","Suzuki","Vitara",17999.59f));
-        
-    }
+//    public void crearAutos(){
+//        getAutos().insertar(new Auto("XCB-52013","BMW","X6",10000.99f));
+//        getAutos().insertar(new Auto("DAVS-3561","Chevrolet","Aveo",20050.99f));
+//        getAutos().insertar(new Auto("MDC","Ford","Mustang",13526f));
+//        getAutos().insertar(new Auto("NJM-2219","Honda","Civic",15999.99f));
+//        getAutos().insertar(new Auto("SJM-29124","Hyundai","Tucson",22535f));
+//        getAutos().insertar(new Auto("DCT-282314","Jeep","Compass",17888f));
+//        getAutos().insertar(new Auto("BHR-124","Ferrari","F8 Tributo",70589.99f));
+//        getAutos().insertar(new Auto("ZCK-485","Suzuki","Vitara",17999.59f));
+//        getAutos().insertar(new Auto("CDA-1542","Ferrari","SF90 Stradale",99999.99f));
+//        getAutos().insertar(new Auto("AVD-957","BMW","Serie 1",32954f));
+//        
+//    }
 
     public ListaEnlazada<Auto> getAutos() {
         return autos;
