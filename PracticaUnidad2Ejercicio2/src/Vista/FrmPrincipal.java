@@ -448,7 +448,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
             try {
                 Integer pos = ac.getAutos().busquedaBinaria(cbxAtributoBusqueda.getSelectedItem().toString().toLowerCase(), aux);
                 ac2.getAutos().insertar(ac.getAutos().obtener(pos));
-                ac2.getAutos().imprimir();
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
             }
